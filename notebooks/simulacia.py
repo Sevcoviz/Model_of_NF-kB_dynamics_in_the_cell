@@ -1,7 +1,10 @@
 #simulacia.py
 import numpy as np
-from rovnice import BasalSystem
-from parametre import Parameters
+from rovnice import BasalSystem, CompartmentalSystem
+from parametre import Parameters, CompartmentalParameters
+
+
+
 
 class Simulate_Basal_System:
     def __init__(self, K0=1.0, N0=0.0, I0=0.65, R0=0.0, G0=0.0, dt=0.01, t_max=5.0):
@@ -66,3 +69,128 @@ class Simulate_Basal_System:
         return self.t, self.K, self.N, self.I, self.R, self.G, self.G_mm
     
 
+
+# # A single class to handle the simulation loop and data storage.
+# class SimulateCompartmentalSystem:
+#     def __init__(self, K0=0.5, N_C0=0.03, N_N0=0.02, I_C0=0.04, I_N0=0.002, NI_C0=0.02, NI_N0=0.0, G0=0.1, R0=0.001, dt=0.01, t_max=5.0):
+#         self.K0 = K0
+#         self.N_C0 = N_C0
+#         self.N_N0 = N_N0
+#         self.I_C0 = I_C0
+#         self.I_N0 = I_N0
+#         self.NI_C0 = NI_C0
+#         self.NI_N0 = NI_N0
+#         self.G0 = G0
+#         self.R0 = R0
+#         self.dt = dt
+#         self.t_max = t_max
+
+#         self.system = CompartmentalSystem()
+#         self.params = self.system.parameters
+#         self.n_steps = int(t_max / dt)
+
+#         self.t = np.zeros(self.n_steps)
+#         self.K = np.zeros(self.n_steps)
+#         self.N_C = np.zeros(self.n_steps)
+#         self.N_N = np.zeros(self.n_steps)
+#         self.I_C = np.zeros(self.n_steps)
+#         self.I_N = np.zeros(self.n_steps)
+#         self.NI_C = np.zeros(self.n_steps)
+#         self.NI_N = np.zeros(self.n_steps)
+#         self.G = np.zeros(self.n_steps)
+#         self.R = np.zeros(self.n_steps)
+
+#     def run(self):
+#         # Initial values
+#         self.K[0] = self.K0
+#         self.N_C[0] = self.N_C0
+#         self.N_N[0] = self.N_N0
+#         self.I_C[0] = self.I_C0
+#         self.I_N[0] = self.I_N0
+#         self.NI_C[0] = self.NI_C0
+#         self.NI_N[0] = self.NI_N0
+#         self.G[0] = self.G0
+#         self.R[0] = self.R0
+
+#         # Simulation loop using Euler method
+#         for i in range(1, self.n_steps):
+#             self.t[i] = self.t[i-1] + self.dt
+
+#             y_prev = [self.K[i-1], self.N_C[i-1], self.N_N[i-1], self.I_C[i-1], self.I_N[i-1], self.NI_C[i-1], self.NI_N[i-1], self.G[i-1], self.R[i-1]]
+#             dK, dN_C, dN_N, dI_C, dI_N, dNI_C, dNI_N, dG, dR = self.system.d_eqs(self.t[i-1], y_prev)
+
+#             self.K[i] = self.K[i-1] + dK * self.dt
+#             self.N_C[i] = self.N_C[i-1] + dN_C * self.dt
+#             self.N_N[i] = self.N_N[i-1] + dN_N * self.dt
+#             self.I_C[i] = self.I_C[i-1] + dI_C * self.dt
+#             self.I_N[i] = self.I_N[i-1] + dI_N * self.dt
+#             self.NI_C[i] = self.NI_C[i-1] + dNI_C * self.dt
+#             self.NI_N[i] = self.NI_N[i-1] + dNI_N * self.dt
+#             self.G[i] = self.G[i-1] + dG * self.dt
+#             self.R[i] = self.R[i-1] + dR * self.dt
+
+#         return self.t, self.K, self.N_C, self.N_N, self.I_C, self.I_N, self.NI_C, self.NI_N, self.G, self.R
+
+
+
+
+class SimulateCompartmentalSystem:
+    def __init__(self, K0=1.0, N_C0=0.0, N_N0=0.0, I_C0=0.0, I_N0=0.0, NI_C0=0.0, NI_N0=0.0, G0=0.0, R0=0.0, dt=0.01, t_max=10.0):
+        self.K0 = K0
+        self.N_C0 = N_C0
+        self.N_N0 = N_N0
+        self.I_C0 = I_C0
+        self.I_N0 = I_N0
+        self.NI_C0 = NI_C0
+        self.NI_N0 = NI_N0
+        self.G0 = G0
+        self.R0 = R0
+        self.dt = dt
+        self.t_max = t_max
+
+        self.system = CompartmentalSystem()
+        self.parameters = self.system.parameters
+        self.n_steps = int(t_max / dt)
+
+        # Outputs initialized
+        self.t = np.linspace(0, t_max, self.n_steps)
+        self.K = np.zeros(self.n_steps)
+        self.N_C = np.zeros(self.n_steps)
+        self.N_N = np.zeros(self.n_steps)
+        self.I_C = np.zeros(self.n_steps)
+        self.I_N = np.zeros(self.n_steps)
+        self.NI_C = np.zeros(self.n_steps)
+        self.NI_N = np.zeros(self.n_steps)
+        self.G = np.zeros(self.n_steps)
+        self.R = np.zeros(self.n_steps)
+
+    def run(self):
+        # Initial values
+        self.K[0] = self.K0
+        self.N_C[0] = self.N_C0
+        self.N_N[0] = self.N_N0
+        self.I_C[0] = self.I_C0
+        self.I_N[0] = self.I_N0
+        self.NI_C[0] = self.NI_C0
+        self.NI_N[0] = self.NI_N0
+        self.G[0] = self.G0
+        self.R[0] = self.R0
+
+        # Simulation loop using Euler method
+        for i in range(1, self.n_steps):
+            dK, dN_C, dN_N, dI_C, dI_N, dNI_C, dNI_N, dG, dR = self.system.ode_equations(
+                self.t[i-1],
+                [self.K[i-1], self.N_C[i-1], self.N_N[i-1], self.I_C[i-1], self.I_N[i-1], self.NI_C[i-1], self.NI_N[i-1], self.G[i-1], self.R[i-1]]
+            )
+
+            self.K[i] = self.K[i-1] + self.dt * dK
+            self.N_C[i] = self.N_C[i-1] + self.dt * dN_C
+            self.N_N[i] = self.N_N[i-1] + self.dt * dN_N
+            self.I_C[i] = self.I_C[i-1] + self.dt * dI_C
+            self.I_N[i] = self.I_N[i-1] + self.dt * dI_N
+            self.NI_C[i] = self.NI_C[i-1] + self.dt * dNI_C
+            self.NI_N[i] = self.NI_N[i-1] + self.dt * dNI_N
+            self.G[i] = self.G[i-1] + self.dt * dG
+            self.R[i] = self.R[i-1] + self.dt * dR
+
+        return self.t, self.K, self.N_C, self.N_N, self.I_C, self.I_N, self.NI_C, self.NI_N, self.G, self.R
