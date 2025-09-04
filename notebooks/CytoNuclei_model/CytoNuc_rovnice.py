@@ -1,3 +1,4 @@
+
 class NFkBSystemExact:
     """NF-κB signaling dynamics (exact article equations)."""
 
@@ -8,13 +9,12 @@ class NFkBSystemExact:
         N, Nn, I, In, Im, NI, NIn = y
         p = self.p
 
-        dNn = p.k_in * N - p.k_fn * Nn * In + p.k_bn * NIn
-        dIm = p.k_t * (Nn ** 2) - p.gamma_m * Im
-        dI = p.k_tl * Im - p.k_f * N * I + p.k_b * NI - p.k_Iin * I + p.k_Iout * In
-        dN = -p.k_f * N * I + (p.k_b + p.alpha) * NI - p.k_in * N
-        dNI = p.k_f * N * I - (p.k_b + p.alpha) * NI + p.k_NIout * NIn
-        dNIn = p.k_fn * Nn * In - (p.k_bn + p.k_NIout) * NIn
-        dIn = p.k_Iin * I - p.k_Iout * In - p.k_fn * Nn * In + p.k_bn * NIn
+        dNn = p.k1 * N - p.a3 * Nn * In + p.a4 * NIn
+        dIm = p.t3 * (Nn ** 2) - p.d5 * Im
+        dI = p.t4 * Im - p.a1 * N * I + p.a2 * NI - p.k2 * I + p.k3 * In
+        dN = -p.a1 * N * I + (p.a2 + p.d1) * NI - p.k1 * N
+        dNI = p.a1 * N * I - (p.a2 + p.d1) * NI + p.k4 * NIn
+        dNIn = p.a3 * Nn * In - (p.a4 + p.k4) * NIn
+        dIn = p.k2 * I - p.k3 * In - p.a3 * Nn * In + p.a4 * NIn
 
         return [dN, dNn, dI, dIn, dIm, dNI, dNIn]
-

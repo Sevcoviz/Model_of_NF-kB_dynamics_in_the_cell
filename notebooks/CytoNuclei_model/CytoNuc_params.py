@@ -1,24 +1,25 @@
+
 class CytoNucParamsExact:
     def __init__(self):
-        # Transport
-        self.k_in = 5.4       # min^-1
-        self.k_Iin = 0.018    # min^-1
-        self.k_Iout = 0.012   # min^-1
-        self.k_NIout = 0.83   # min^-1
+        # UNIFIED PARAMETER NAMES
 
+        # Association / Dissociation
+        self.a1 = 30.0       # Original: k_f - Binding / dissociation (μM^-1 min^-1)
+        self.a2 = 0.03       # Original: k_b - Binding / dissociation (min^-1)
+        self.a3 = 30.0       # Original: k_fn - Binding / dissociation (μM^-1 min^-1)
+        self.a4 = 0.03       # Original: k_bn - Binding / dissociation (min^-1)
+
+        # Degradation
+        self.IKK = 0.5       # IKK initial concentration (μM)
+        self.d1 = 1.05 * self.IKK  # Original: alpha - IKK-dependent degradation (min^-1)
+        self.d5 = 0.017      # Original: gamma_m - mRNA degradation (min^-1)
+        
         # Transcription / translation
-        self.k_t = 1.03       # μM^-1 min^-1
-        self.k_tl = 0.24      # min^-1
+        self.t3 = 1.03       # Original: k_t - Transcription / translation (μM^-1 min^-1)
+        self.t4 = 0.24       # Original: k_tl - Transcription / translation (min^-1)
 
-        # Binding / dissociation
-        self.k_f = 30.0       # μM^-1 min^-1
-        self.k_fn = 30.0      # μM^-1 min^-1
-        self.k_b = 0.03       # min^-1
-        self.k_bn = 0.03      # min^-1
-
-        # IKK-dependent degradation
-        self.IKK = 0.5        # μM initial
-        self.alpha = 1.05 * self.IKK  # min^-1
-
-        # mRNA degradation
-        self.gamma_m = 0.017  # min^-1
+        # Transport
+        self.k1 = 5.4        # Original: k_in - Transport (min^-1)
+        self.k2 = 0.018      # Original: k_Iin - Transport (min^-1)
+        self.k3 = 0.012      # Original: k_Iout - Transport (min^-1)
+        self.k4 = 0.83       # Original: k_NIout - Transport (min^-1)
