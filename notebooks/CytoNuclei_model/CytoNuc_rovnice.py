@@ -18,3 +18,4 @@ class NFkBSystemExact:
         dIn = p.k2 * I - p.k3 * In - p.a3 * Nn * In + p.a4 * NIn
 
         return [dN, dNn, dI, dIn, dIm, dNI, dNIn]
+

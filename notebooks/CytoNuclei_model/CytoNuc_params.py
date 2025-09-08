@@ -1,6 +1,5 @@
-
 class CytoNucParamsExact:
-    def __init__(self):
+    def __init__(self, IKK_stimulation=0.5):
         # UNIFIED PARAMETER NAMES
 
         # Association / Dissociation
@@ -10,7 +9,8 @@ class CytoNucParamsExact:
         self.a4 = 0.03       # Original: k_bn - Binding / dissociation (min^-1)
 
         # Degradation
-        self.IKK = 0.5       # IKK initial concentration (μM)
+        # IKK is now the variable stimulus parameter
+        self.IKK = IKK_stimulation
         self.d1 = 1.05 * self.IKK  # Original: alpha - IKK-dependent degradation (min^-1)
         self.d5 = 0.017      # Original: gamma_m - mRNA degradation (min^-1)
         
@@ -23,3 +23,5 @@ class CytoNucParamsExact:
         self.k2 = 0.018      # Original: k_Iin - Transport (min^-1)
         self.k3 = 0.012      # Original: k_Iout - Transport (min^-1)
         self.k4 = 0.83       # Original: k_NIout - Transport (min^-1)
+
+
