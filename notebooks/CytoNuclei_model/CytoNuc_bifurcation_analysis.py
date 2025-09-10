@@ -1,11 +1,8 @@
-# analysis_tools.py
-
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 from scipy.integrate import solve_ivp
 
-# Importujeme triedy z našich existujúcich súborov
 from CytoNuc_rovnice import NFkBSystemExact
 from CytoNuc_params import CytoNucParamsExact
 
@@ -26,7 +23,6 @@ def run_bifurcation_analysis(observed_variable, bifurcation_param, param_range, 
     """
     print(f"Spúšťam bifurkačnú analýzu pre parameter '{bifurcation_param}', sledujem premennú '{observed_variable}'...")
 
-    # Mapa názvov premenných na ich indexy v poli `sol.y`
     variable_map = {'N': 0, 'Nn': 1, 'I': 2, 'In': 3, 'Im': 4, 'NI': 5, 'NIn': 6}
     
     if observed_variable not in variable_map:
@@ -57,7 +53,6 @@ def run_bifurcation_analysis(observed_variable, bifurcation_param, param_range, 
         min_values.append(min_val)
         max_values.append(max_val)
 
-    # Vykreslenie diagramu
     plt.figure(figsize=(12, 7))
     plt.plot(param_values, min_values, 'k.', markersize=2)
     plt.plot(param_values, max_values, 'k.', markersize=2)
