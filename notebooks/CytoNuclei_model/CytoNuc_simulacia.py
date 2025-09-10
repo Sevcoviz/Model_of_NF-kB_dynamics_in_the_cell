@@ -134,7 +134,7 @@ class NFkBSimulatorExact:
 
         for val in param_range:
             params = CytoNucParamsExact(IKK_stimulation=ikk_stim)
-            setattr(params, param_name, val)  # Set the parameter dynamically
+            setattr(params, param_name, val)  
             self.system.p = params
             
             sol = self.simulate(t_span=(0, 1000))
@@ -168,30 +168,26 @@ class NFkBSimulatorExact:
         """NEW: Plots more advanced visualizations of system dynamics."""
         N, Nn, I, In, Im, NI, NIn = sol.y
         
-        # Calculate derived quantities
-        NFkB_total_pool = N + Nn + NI + NIn  # Total NF-kB protein backbone
-        IkB_total_pool = I + In + NI + NIn     # Total IkB protein backbone
-        NFkB_total_free = N + Nn              # Total free NF-kB
-        fractional_Nn = Nn / (NFkB_total_free + 1e-9) # Avoid division by zero
+        NFkB_total_pool = N + Nn + NI + NIn  
+        IkB_total_pool = I + In + NI + NIn     
+        NFkB_total_free = N + Nn              
+        fractional_Nn = Nn / (NFkB_total_free + 1e-9) 
         
         fig, axes = plt.subplots(2, 2, figsize=(12, 10))
         axes = axes.flatten()
 
-        # Panel 1: Phase Portrait (Nn vs Im) - Shows feedback delay
         axes[0].plot(Nn, Im, color='purple')
         axes[0].set_title("Phase Portrait: Activator vs. Feedback Source")
         axes[0].set_xlabel("Nuclear NF-κB (Nn) [μM]")
         axes[0].set_ylabel("IκB mRNA (Im) [μM]")
         axes[0].grid(True)
         
-        # Panel 2: Phase Portrait (Nn vs In) - Shows nuclear inhibition cycle
         axes[1].plot(Nn, In, color='green')
         axes[1].set_title("Phase Portrait: Activator vs. Nuclear Inhibitor")
         axes[1].set_xlabel("Nuclear NF-κB (Nn) [μM]")
         axes[1].set_ylabel("Nuclear IκB (In) [μM]")
         axes[1].grid(True)
         
-        # Panel 3: Fractional Activation of NF-κB
         axes[2].plot(sol.t, fractional_Nn, color='orangered', linewidth=2)
         axes[2].set_title("Fractional Nuclear Activation of NF-κB")
         axes[2].set_xlabel("Time (min)")
@@ -199,7 +195,6 @@ class NFkBSimulatorExact:
         axes[2].set_ylim(0, 1.05)
         axes[2].grid(True)
 
-        # Panel 4: Conservation of Protein Pools
         axes[3].plot(sol.t, NFkB_total_pool, label="Total NF-κB Pool", linewidth=2)
         axes[3].plot(sol.t, IkB_total_pool, label="Total IκB Pool", linewidth=2)
         axes[3].set_title("Conservation of Total Protein")
@@ -213,7 +208,6 @@ class NFkBSimulatorExact:
         plt.show()
         
     def plot_pathology_report(self, IKK_stim_range, peak_Nn_values, auc_Nn_values, final_Nn_values):
-        # (This function remains unchanged, added x-labels for consistency)
         fig, axes = plt.subplots(1, 3, figsize=(18, 5))
         
         axes[0].plot(IKK_stim_range, peak_Nn_values, 'o-', color='r')
@@ -237,7 +231,6 @@ class NFkBSimulatorExact:
         plt.show()
 
     def plot_sensitivity_report_t3(self, t3_range, peak_Nn_values, auc_Nn_values, final_Nn_values):
-        # (This function remains unchanged)
         fig, axes = plt.subplots(1, 3, figsize=(18, 5))
         
         axes[0].plot(t3_range, peak_Nn_values, 'o-', color='r')
@@ -264,27 +257,22 @@ class NFkBSimulatorExact:
         """NEW: Plots a comparative report for k1 and k2 sensitivity."""
         fig, axes = plt.subplots(1, 3, figsize=(18, 5), sharey=False)
         
-        # Unpack results
         k1_range, peak_k1, auc_k1, final_k1 = k1_results
         k2_range, peak_k2, auc_k2, final_k2 = k2_results
         
-        # Normalize the parameter range to show fold change from baseline
         k1_norm = k1_range / 5.4  # Baseline k1 is 5.4
         k2_norm = k2_range / 0.018 # Baseline k2 is 0.018
         
-        # Panel 1: Peak Nn
         axes[0].plot(k1_norm, peak_k1, 'o-', color='purple', label='NF-κB Import (k1)')
         axes[0].plot(k2_norm, peak_k2, 's-', color='orange', label='IκB Import (k2)')
         axes[0].set_title('Peak Nn Sensitivity')
         axes[0].set_ylabel('Peak Concentration (μM)')
         
-        # Panel 2: Sustained Activation (AUC)
         axes[1].plot(k1_norm, auc_k1, 'o-', color='purple', label='NF-κB Import (k1)')
         axes[1].plot(k2_norm, auc_k2, 's-', color='orange', label='IκB Import (k2)')
         axes[1].set_title('Sustained Activation (AUC) Sensitivity')
         axes[1].set_ylabel('Total Activity (μM * min)')
 
-        # Panel 3: Final Steady-State
         axes[2].plot(k1_norm, final_k1, 'o-', color='purple', label='NF-κB Import (k1)')
         axes[2].plot(k2_norm, final_k2, 's-', color='orange', label='IκB Import (k2)')
         axes[2].set_title('Final Steady-State Sensitivity')
@@ -322,31 +310,9 @@ class NFkBSimulatorExact:
         return IKK_stim_range, peak_Nn_values, auc_Nn_values, final_Nn_values
 
         
-    def plot_pathology_report(self, IKK_stim_range, peak_Nn_values, auc_Nn_values, final_Nn_values):
-        # (This function remains unchanged, but a subplot fix is suggested)
-        fig, axes = plt.subplots(1, 3, figsize=(18, 5))
-        
-        axes[0].plot(IKK_stim_range, peak_Nn_values, 'o-', color='r')
-        axes[0].set_title('Peak Nuclear NF-κB (Nn)')
-        axes[0].set_ylabel('Peak Concentration (μM)')
-        
-        axes[1].plot(IKK_stim_range, auc_Nn_values, 'o-', color='g')
-        axes[1].set_title('Sustained Nn Activation (Area Under Curve)')
-        axes[1].set_ylabel('Total Activity (μM * min)')
 
-        axes[2].plot(IKK_stim_range, final_Nn_values, 'o-', color='b')
-        axes[2].set_title('Final Nn Steady-State')
-        axes[2].set_ylabel('Final Concentration (μM)')
 
-        for ax in axes:
-            ax.grid(True)
-            ax.set_xlabel('IKK Stimulus Concentration (μM)')
-        
-        fig.suptitle("Pathological Response Monitoring Pipeline", fontsize=16, y=1.02)
-        fig.tight_layout()
-        plt.show()
 
-    # (Add this new function to the NFkBSimulatorExact class in CytoNuc_simulacia.py)
 
 
 

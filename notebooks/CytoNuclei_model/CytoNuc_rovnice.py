@@ -1,6 +1,6 @@
 
 class NFkBSystemExact:
-    """NF-κB signaling dynamics (exact article equations)."""
+    """NF-κB signaling dynamics."""
 
     def __init__(self, params):
         self.p = params

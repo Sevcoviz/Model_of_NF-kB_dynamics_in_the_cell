@@ -205,3 +205,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+notebooks\CytoNuclei_model\CytoNuc_bifurcation_analysis.py
+notebooks\Basal_model\vizualizacia.py
